@@ -23,10 +23,7 @@ namespace AS1NguyenNguyen
 
 			WriteLine();
 			WriteLine("Welcome!!!");
-			WriteLine("-------------------------------------------");
 
-			//while (!isFinished)
-			//{
 			string programName;
 			string courses;
 			string dormType;
@@ -38,27 +35,21 @@ namespace AS1NguyenNguyen
 			totalCost = labFee + courseFee + dormFee;
 
 			WriteLine();
+			WriteLine("---------------Result-----------------------");
 			WriteLine("Your are in the {0} program", programName);
 			WriteLine("and the lab fee is {0:c}", labFee);
 
 			WriteLine();
 			WriteLine("Your courses are {0}", courses);
-			WriteLine("The tuition fee amount is {0:c}", courseFee);
+			WriteLine("The tuition fee amount is: {0:c}", courseFee);
 
 			WriteLine();
-			WriteLine("Your dorm type are {0}", dormType);
-			WriteLine("Your dorm fee is {0:c}", dormFee);
+			WriteLine("Your dorm type is {0}", dormType);
+			WriteLine("Your dorm fee is: {0:c}", dormFee);
 
 			WriteLine();
-			WriteLine("The total amount of fee is {0:c}", totalCost);
+			WriteLine("The total amount of fee is: {0:c}", totalCost);
 			ReadKey();
-
-			//	WriteLine();
-			//	WriteLine("Would you like to try again? Enter Y (yes) or N (no)");
-			//	isFinished = ReadLine().ToUpper() == "N";
-
-			//	if (!isFinished) WriteLine("-------------------------------------------");
-			//}
 		}
 
 		/**
@@ -76,6 +67,8 @@ namespace AS1NguyenNguyen
 			const string MARKETING = "mark";
 
 			WriteLine();
+
+			WriteLine("---------------Program---------------------");
 			//Ask for user input, validate and return appropriate lab fee.
 			while (labFee == -1)
 			{
@@ -121,6 +114,7 @@ namespace AS1NguyenNguyen
 			bool isDone = false;
 
 			WriteLine();
+			WriteLine("---------------Courses---------------------");
 			while (!isDone)
 			{
 				courses = "";
@@ -198,6 +192,9 @@ namespace AS1NguyenNguyen
 		{
 			dormType = "";
 			bool isValid = false;
+
+			Console.WriteLine();
+			WriteLine("---------------Dorm------------------------");
 			while (!isValid)
 			{
 				WriteLine("Dorm option: 0 no dorm; 1 single dorm; 2 double dorm");
