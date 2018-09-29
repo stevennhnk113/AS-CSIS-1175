@@ -15,7 +15,7 @@ namespace AS1NguyenNguyen
 	{
 		static void Main(string[] args)
 		{
-			bool isFinished = false;
+			//bool isFinished = false;
 			double labFee = 0;
 			double courseFee = 0;
 			double dormFee = 0;
@@ -25,41 +25,45 @@ namespace AS1NguyenNguyen
 			WriteLine("Welcome!!!");
 			WriteLine("-------------------------------------------");
 
-			while (!isFinished)
-			{
-				string programName;
-				string courses;
-				string dormType;
+			//while (!isFinished)
+			//{
+			string programName;
+			string courses;
+			string dormType;
 
-				labFee = GetProgram(out programName);
-				courseFee = GetCourse(out courses);
-				dormFee = GetDorm(out dormType);
+			labFee = GetProgram(out programName);
+			courseFee = GetCourse(out courses);
+			dormFee = GetDorm(out dormType);
 
-				totalCost = labFee + courseFee + dormFee;
+			totalCost = labFee + courseFee + dormFee;
 
-				WriteLine();
-				WriteLine("Your are in the {0} program", programName);
-				WriteLine("and the lab fee is {0:c}", labFee);
+			WriteLine();
+			WriteLine("Your are in the {0} program", programName);
+			WriteLine("and the lab fee is {0:c}", labFee);
 
-				WriteLine();
-				WriteLine("Your courses are {0}", courses);
-				WriteLine("The tuition fee amount is {0:c}", courseFee);
+			WriteLine();
+			WriteLine("Your courses are {0}", courses);
+			WriteLine("The tuition fee amount is {0:c}", courseFee);
 
-				WriteLine();
-				WriteLine("Your dorm type are {0}", dormType);
-				WriteLine("Your dorm fee is {0:c}", dormFee);
+			WriteLine();
+			WriteLine("Your dorm type are {0}", dormType);
+			WriteLine("Your dorm fee is {0:c}", dormFee);
 
-				WriteLine();
-				WriteLine("The total amount of fee is {0:c}", totalCost);
+			WriteLine();
+			WriteLine("The total amount of fee is {0:c}", totalCost);
+			ReadKey();
 
-				WriteLine();
-				WriteLine("Would you like to try again? Enter Y (yes) or N (no)");
-				isFinished = ReadLine().ToUpper() == "N";
+			//	WriteLine();
+			//	WriteLine("Would you like to try again? Enter Y (yes) or N (no)");
+			//	isFinished = ReadLine().ToUpper() == "N";
 
-				if (!isFinished) WriteLine("-------------------------------------------");
-			}
+			//	if (!isFinished) WriteLine("-------------------------------------------");
+			//}
 		}
 
+		/**
+		 * Method to get program name and lab fee.
+		 **/
 		static double GetProgram(out string programName)
 		{
 			programName = "";
@@ -67,11 +71,12 @@ namespace AS1NguyenNguyen
 			string programCode;
 
 			const string BUSINESS = "busn";
-			const string COMPUTINGSTUDIES = "csis";
+			const string COMPUTING_STUDIES = "csis";
 			const string ECONOMICS = "econ";
 			const string MARKETING = "mark";
 
 			WriteLine();
+			//Ask for user input, validate and return appropriate lab fee.
 			while (labFee == -1)
 			{
 				WriteLine("Which program do you belong to?");
@@ -83,7 +88,7 @@ namespace AS1NguyenNguyen
 						programName = "Business";
 						labFee = 100.00;
 						break;
-					case COMPUTINGSTUDIES:
+					case COMPUTING_STUDIES:
 						programName = "Computing Studies";
 						labFee = 150.00;
 						break;
@@ -96,6 +101,7 @@ namespace AS1NguyenNguyen
 						labFee = 0;
 						break;
 					default:
+						WriteLine("Invalid input!");
 						labFee = -1;
 						break;
 				}
@@ -104,6 +110,9 @@ namespace AS1NguyenNguyen
 			return labFee;
 		}
 
+		/**
+		 * Method to get course codes and return course fees.
+		 **/
 		static double GetCourse(out string courses)
 		{
 			courses = "";
@@ -119,6 +128,9 @@ namespace AS1NguyenNguyen
 
 				WriteLine("Please enter up to 4 courses that you want to register:");
 				courseList = ReadLine().Split(' ');
+				//Validate input of course code
+				//maximum of 4 courses, minimum of 1 course
+				//and the input must not be empty
 				if (courseList.Length > 4 || courseList.Length == 1 && string.IsNullOrEmpty(courseList[0]))
 				{
 					WriteLine("InValid input!!!");
@@ -130,7 +142,6 @@ namespace AS1NguyenNguyen
 					int index = 0;
 					while (isValid && index < courseList.Length)
 					{
-						//double totalCourseFee = 0;
 						double courseFee = GetCourseFee(courseList[index]);
 						if (courseFee == -1)
 						{
@@ -139,6 +150,8 @@ namespace AS1NguyenNguyen
 						}
 						else
 						{
+							//Re-generate course code
+							//and sum courses' fee
 							courses += " " + courseList[index];
 							totalCourseFee += courseFee;
 						}
@@ -152,13 +165,18 @@ namespace AS1NguyenNguyen
 			return totalCourseFee;
 		}
 
+		/**
+		 * Method to determine courses fee based on course code.
+		 **/
 		static double GetCourseFee(string courseCode)
 		{
 			int courseCodeInInt = -1;
+			//Try to parse input string value to integer
+			//otherwise return -1 to indicate Invalid Input.
 			int.TryParse(courseCode, out courseCodeInInt);
-
 			if (courseCodeInInt == -1) return -1;
 
+			//Return course fee based on code
 			if (courseCodeInInt < 3000 && courseCodeInInt >= 1000)
 			{
 				return 650.00;
@@ -173,6 +191,9 @@ namespace AS1NguyenNguyen
 			}
 		}
 
+		/**
+		 * Method to get Dorm option and return dorm fee 
+		 **/
 		static double GetDorm(out string dormType)
 		{
 			dormType = "";
