@@ -15,7 +15,6 @@ namespace AS1NguyenNguyen
 	{
 		static void Main(string[] args)
 		{
-			//bool isFinished = false;
 			double labFee = 0;
 			double courseFee = 0;
 			double dormFee = 0;
@@ -152,6 +151,7 @@ namespace AS1NguyenNguyen
 						index++;
 					}
 
+					// Update isDone according to the input is valid
 					isDone = isValid;
 				}
 
