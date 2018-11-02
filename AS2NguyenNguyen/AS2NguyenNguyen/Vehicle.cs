@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// Nguyen Nguyen 300298479
-// Hong Le
+// Nguyen Nguyen	300298479
+// Hong Le			300299969
 
 namespace AS2NguyenNguyen
 {
@@ -15,6 +15,8 @@ namespace AS2NguyenNguyen
 		public double DriverAgeSurcharge = -1;
 		private double _VehicleTypeSurchargePercentage = -1;
 		private double _Discount = -1;
+
+		private int vehicleMaxAge = 20;
 
 		private int _VehicleYear;
 		public int VehicleYear
@@ -32,8 +34,8 @@ namespace AS2NguyenNguyen
 			}
 		}
 
-		private int _VehicleValue;
-		public int VehicleValue
+		private double _VehicleValue;
+		public double VehicleValue
 		{
 			get
 			{
@@ -45,6 +47,10 @@ namespace AS2NguyenNguyen
 			}
 		}
 
+
+		/**
+		 *Define Vehicle type percentage
+			**/
 		private VehicleTypeEnum _VehicleType;
 		public VehicleTypeEnum VehicleType
 		{
@@ -60,10 +66,10 @@ namespace AS2NguyenNguyen
 					case VehicleTypeEnum.Sedan:
 						_VehicleTypeSurchargePercentage = 0;
 						break;
-					case VehicleTypeEnum.Sport:
+					case VehicleTypeEnum.SUV:
 						_VehicleTypeSurchargePercentage = 0.01;
 						break;
-					case VehicleTypeEnum.SUV:
+					case VehicleTypeEnum.Sport:
 						_VehicleTypeSurchargePercentage = 0.05;
 						break;
 					case VehicleTypeEnum.Truck:
@@ -73,6 +79,9 @@ namespace AS2NguyenNguyen
 			}
 		}
 
+		/**
+		 * Define discount percentage by selected discount type. 
+		 **/
 		private string _DiscountType;
 		public string DiscountType
 		{
@@ -88,8 +97,8 @@ namespace AS2NguyenNguyen
 					_Discount = 0.25;
 					return;
 				}
-				
-				if(_DiscountType.Contains('B'))
+				_Discount = 0;
+				if (_DiscountType.Contains('B'))
 				{
 					_Discount += 0.1;
 				}
@@ -106,6 +115,9 @@ namespace AS2NguyenNguyen
 			}
 		}
 
+		/**
+		 * Define driver age surcharge by driver age
+		 * **/
 		private int _DriverAge;
 		public int DriverAge
 		{
@@ -131,19 +143,41 @@ namespace AS2NguyenNguyen
 			}
 		}
 
-		public double BasicInsurance
+
+		/**
+		 * Calculate Basic insurance by vehicle value and age
+		 * **/
+		private double _BasicInsurance;
+		public double getBasicInsurance()
 		{
-			get
-			{
-				return _VehicleValue * 0.01 * (20 - VehicleAge);
-			}
+			setBasicInsurance();
+			return _BasicInsurance;
 		}
 
+		public void setBasicInsurance()
+		{
+			_BasicInsurance = (VehicleValue * 0.01 * (vehicleMaxAge - VehicleAge));
+		}
+
+		/**
+		 * Calculate Vehicle type surchage by vehicle surcharge percentage and basic insurance
+		 * **/
+		private double _VehicleTypeSurcharge;
+		public double getVehicleTypeSurcharge()
+		{
+			setVehicleTypeSurcharge();
+			return _VehicleTypeSurcharge;
+		}
+
+		private void setVehicleTypeSurcharge()
+		{
+			_VehicleTypeSurcharge = _VehicleTypeSurchargePercentage * _BasicInsurance;
+		}
 		public double VehicleTypeSurcharge
 		{
 			get
 			{
-				return _VehicleTypeSurchargePercentage * BasicInsurance;
+				return _VehicleTypeSurchargePercentage * _BasicInsurance;
 			}
 		}
 
@@ -151,15 +185,45 @@ namespace AS2NguyenNguyen
 		{
 			get
 			{
-				return BasicInsurance * Discount;
+				return _BasicInsurance * _Discount;
 			}
 		}
 
+
+		/**
+		 * Calculate Net amount based on given input
+		 * **/
 		public double GetInsuranceNetAmt()
 		{
-			if (VehicleAge == -1 || _VehicleValue == -1 || _VehicleTypeSurchargePercentage == -1 || DriverAgeSurcharge == -1) return -1;
-			return 0;
+			if (VehicleAge < 0 || VehicleValue < 0 || _VehicleTypeSurchargePercentage == -1 || DriverAgeSurcharge == -1)
+			{
+				return -1;
+			}
+			return (_BasicInsurance + _VehicleTypeSurcharge + DriverAgeSurcharge) - Discount ;
 		}
+
+		/**
+		 * Checking if user's input is valid for further calculation
+		 * **/
+		public bool hasValidInput()
+		{
+			if (VehicleYear > -1 && VehicleValue > -1 && DriverAge > -1 
+				&& VehicleType != VehicleTypeEnum.None)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool isGreaterThan20()
+		{
+			if (VehicleAge >= 20)
+			{
+				return true;
+			}
+			return false;
+		}
+
 	}
 
 	public enum VehicleTypeEnum
@@ -167,6 +231,7 @@ namespace AS2NguyenNguyen
 		Sedan = 1,
 		SUV = 2,
 		Sport = 3,
-		Truck = 4
+		Truck = 4,
+		None = -1
 	}
 }
