@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 // Nguyen Nguyen	300298479
 // Hong Le			300299969
@@ -165,20 +161,8 @@ namespace AS2NguyenNguyen
 		private double _VehicleTypeSurcharge;
 		public double getVehicleTypeSurcharge()
 		{
-			setVehicleTypeSurcharge();
-			return _VehicleTypeSurcharge;
-		}
-
-		private void setVehicleTypeSurcharge()
-		{
 			_VehicleTypeSurcharge = _VehicleTypeSurchargePercentage * _BasicInsurance;
-		}
-		public double VehicleTypeSurcharge
-		{
-			get
-			{
-				return _VehicleTypeSurchargePercentage * _BasicInsurance;
-			}
+			return _VehicleTypeSurcharge;
 		}
 
 		public double Discount
@@ -223,7 +207,6 @@ namespace AS2NguyenNguyen
 			}
 			return false;
 		}
-
 	}
 
 	public enum VehicleTypeEnum
