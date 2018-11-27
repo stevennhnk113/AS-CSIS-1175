@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * Nguyen Nguyen	300298479
+ * Hong Le			300299969
+ * **/
 
 namespace AS3Nguyennguyen
 {
@@ -12,7 +11,8 @@ namespace AS3Nguyennguyen
 		string _acc;
 		string _insurance;
 		double _hrs;
-		public double charges = 0;
+
+		public double totalCharges = 0;
 		const string EMPTY_STRING = "";
 
 		public Rental(string type, string acc, string insurance, double hrs)
@@ -25,50 +25,49 @@ namespace AS3Nguyennguyen
 
 		public string getType()
 		{
-			double rate = 0;
+			string type = "";
+			double before3Rate = 0;
+			double after3Rate = 0;
 			if (_type != EMPTY_STRING && _type != null)
 			{
 				switch (_type)
 				{
 					case "1":
-						if (_hrs > 3)
-						{
-							rate = 13; 
-						} else
-						{
-							rate = 10;
-						}
-						charges += rate * _hrs;
-						return "Single-speed";
+						before3Rate = 10;
+						after3Rate = 13;
+						type =  "Single-speed";
+						break;
 					case "2":
-						if (_hrs > 3)
-						{
-							rate = 10;
-						}
-						else
-						{
-							rate = 12;
-						}
-						charges += rate * _hrs;
-						return "Seven-speed";
+						before3Rate = 12;
+						after3Rate = 10;
+						type = "Seven-speed";
+						break;
 					case "3":
-						if (_hrs > 3)
-						{
-							rate = 15;
-						}
-						else
-						{
-							rate = 20;
-						}
-						charges += rate * _hrs;
-						return "Tandem";
+						before3Rate = 20;
+						after3Rate = 15;
+						type = "Tandem";
+						break;
 					default:
-						charges += 25 * _hrs;
-						return "Mountain";
+						before3Rate = 25;
+						after3Rate = 25;
+						type = "Mountain";
+						break;
 				}
-			}
 
-			return EMPTY_STRING;
+				if(_hrs > 3)
+				{
+					totalCharges = 3 * before3Rate + (_hrs - 3) * after3Rate;
+				}
+				else
+				{
+					totalCharges = _hrs * before3Rate;
+				}
+				return type;
+			}
+			else
+			{
+				return EMPTY_STRING;
+			}
 		}
 
 		public string getAcc()
@@ -78,23 +77,26 @@ namespace AS3Nguyennguyen
 			{
 				if (_acc.Contains("N"))
 				{
-					charges += 0;
+					totalCharges += 0;
 					accessoriesStr = "None requested";
 					return accessoriesStr;
 				}
 
 				if (_acc.Contains("L"))
 				{
+					totalCharges += 10;
 					accessoriesStr += "Bike Lock, ";
 				}
 
 				if (_acc.Contains("C"))
 				{
+					totalCharges += 10;
 					accessoriesStr += "Child Seat, ";
 				}
 
 				if (_acc.Contains("R"))
 				{
+					totalCharges += 10;
 					accessoriesStr += "Rack, ";
 				}
 				accessoriesStr = accessoriesStr.Remove(accessoriesStr.Length - 2);
@@ -109,10 +111,10 @@ namespace AS3Nguyennguyen
 				switch (_insurance)
 				{
 					case "Y":
-						charges += 5;
+						totalCharges += 5;
 						return "Yes";
 					default:
-						charges += 0;
+						totalCharges += 0;
 						return "No";
 				}
 			}
@@ -122,7 +124,7 @@ namespace AS3Nguyennguyen
 
 		public double getTotalCharges()
 		{
-			return charges;
+			return totalCharges;
 		}
 	}
 }

@@ -20,9 +20,11 @@ namespace AS3Nguyennguyen
 	{
 		const string EMPTY_STRING = "";
 		private string[][] customerData;
+		private string[][] printOutData;
+
 		//Todo: move this to c:\temp
-		const string customerDataFilePath = @"C:\Users\Steven\Desktop\AS3 data files\AS3customers.csv";
-		const string dataFilePath = @"C:\Users\Steven\Desktop\AS3 data files\AS3data.csv";
+		const string customerDataFilePath = @"C:\temp\AS3customers.csv";
+		const string dataFilePath = @"C:\temp\AS3data.csv";
 		int length = 0;
 		public Form1()
 		{
@@ -85,7 +87,7 @@ namespace AS3Nguyennguyen
 			lstResult.Items.Clear();
 
 			//Read and merge 2 files to 1 table of 8 columns
-			string[][] customerData = new string[File.ReadAllLines(dataFilePath).Length][];
+			printOutData = new string[File.ReadAllLines(dataFilePath).Length][];
 			StreamReader reader = File.OpenText(dataFilePath);
 			int count = 0;
 			while (!reader.EndOfStream)
@@ -94,37 +96,72 @@ namespace AS3Nguyennguyen
 				string[] data = line.Split(',');
 				string name = getCustomer(data[0]);
 
-				customerData[count] = new string[data.Length + 1];
+				printOutData[count] = new string[data.Length + 2];
 
 				//Update the rental values based on input data from csv
 				Rental rental = new Rental(data[3], data[4], data[5], double.Parse(data[6]));
 
 				//Assign data to customerData to later populate in List Box view
-				customerData[count][0] = data[0];
-				customerData[count][1] = name;
-				customerData[count][2] = data[1];
-				customerData[count][3] = data[2];
-				customerData[count][4] = rental.getType();
-				customerData[count][5] = rental.getAcc();
-				customerData[count][6] = rental.getInsurance();
-				customerData[count][7] = rental.getTotalCharges().ToString();
+				printOutData[count][0] = data[0]; // ID
+				printOutData[count][1] = name;	
+				printOutData[count][2] = data[1]; // Rent date
+				printOutData[count][3] = data[2];
+				printOutData[count][4] = rental.getType();
+				printOutData[count][5] = rental.getAcc();
+				printOutData[count][6] = rental.getInsurance();
+				printOutData[count][7] = data[6];
+				printOutData[count][8] = rental.getTotalCharges().ToString();
 				count++;
 			}
 			//End merging
 			reader.Close();
 
-			//TODO:
+			//Use Linq to sort data
+			var result = from row in printOutData
+						 orderby DateTime.Parse(row[3])
+						 orderby int.Parse(row[0]) 
+						   select row;
+
 			//Render and Order data here
-
-			lstResult.Items.Add(string.Format(getCustomer("111")));
-		}
-
-		private void ShowResult()
-		{
-			string individualFormat = "{0:15}{1:25}{2:35}{3:50}{4:80}{5:90}{6:100}{7:110}";
-
+			string individualFormat = "{0,-20}{1,10}{2,15}{3,20}{4,35}{5,10}{6,10:0.00}{7,10:C}";
 			lstResult.Items.Add(string.Format(individualFormat, "Customer ID & Name", "Inv #", "Rental Date", "Bike Type", "Accessories", "Insured", "Hrs", "Charge"));
+			lstResult.Items.Add("");
 
+			string id = "-1";
+			double subTotal = 0;
+			double grandTotal = 0;
+			foreach (var item in result)
+			{
+				if(item[0] != id)
+				{
+					if(id != "-1")
+					{
+						lstResult.Items.Add(string.Format("{0,130}", "---------"));
+						lstResult.Items.Add(string.Format("{0,-20}{1,110:c}", "Sub-Total", subTotal));
+						lstResult.Items.Add("");
+
+						grandTotal += subTotal;
+						subTotal = 0;
+					}
+					lstResult.Items.Add(string.Format(individualFormat, item[0] + " " + item[1], item[2], item[3], item[4], item[5], item[6], double.Parse(item[7]), double.Parse(item[8])));
+					id = item[0];
+				}
+				else
+				{
+					lstResult.Items.Add(string.Format(individualFormat, "", item[2], item[3], item[4], item[5], item[6], double.Parse(item[7]), double.Parse(item[8])));
+				}
+
+				subTotal += double.Parse(item[8]);
+			}
+
+			lstResult.Items.Add(string.Format("{0,130}", "---------"));
+			lstResult.Items.Add(string.Format("{0,-20}{1,110:c}", "Sub-Total", subTotal));
+			lstResult.Items.Add("");
+			grandTotal += subTotal;
+
+			lstResult.Items.Add("");
+			lstResult.Items.Add(string.Format("{0,-20}{1,110:c}", "Grand-Total", grandTotal));
+			lstResult.Items.Add("Program coded by Hong Le, Nguyen Nguyen");
 		}
 	}
 }
