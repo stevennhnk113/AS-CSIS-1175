@@ -25,7 +25,8 @@ namespace AS2NguyenNguyen
 			{
 				_VehicleYear = value;
 
-				if (_VehicleYear == 2019) VehicleAge = 0;
+				if (_VehicleYear > 2019) _VehicleYear = -1;
+				else if (_VehicleYear == 2019) VehicleAge = 0;
 				else VehicleAge = 2018 - _VehicleYear;
 			}
 		}
@@ -199,6 +200,9 @@ namespace AS2NguyenNguyen
 			return false;
 		}
 
+		/**
+		 * Method to validate if vehicle age is  greater than 20
+		 * **/
 		public bool isGreaterThan20()
 		{
 			if (VehicleAge >= 20)

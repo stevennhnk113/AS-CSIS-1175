@@ -31,7 +31,7 @@ namespace AS2NguyenNguyen
 			if(!myVehicle.hasValidInput())
 			{
 				string format = "{0, -15}";
-				OutputListBox.Items.Add(string.Format(format, "Not enough data, please try again!"));
+				OutputListBox.Items.Add(string.Format(format, "Invalid or not enough data, please try again!"));
 				return;
 			}
 
@@ -76,8 +76,8 @@ namespace AS2NguyenNguyen
 		//return -1 if parsing fail
 		private double parseDouble(string value)
 		{
-			int doubleVal = -1;
-			if (int.TryParse(value, out doubleVal))
+			double doubleVal = -1;
+			if (double.TryParse(value, out doubleVal))
 			{
 				return doubleVal;
 			}
